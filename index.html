@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>二階申請提醒</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0f141b;
+      --ink: #e8edf3;
+      --muted: #a7b0bd;
+      --line: #2b3543;
+      --panel: #171f29;
+      --panel-2: #1d2733;
+      --done: #7dd3a7;
+      --wait: #f2c875;
+      --soon: #f39a8f;
+      --blue: #8bbdf1;
+      --soft-green: rgba(125, 211, 167, 0.14);
+      --soft-yellow: rgba(242, 200, 117, 0.16);
+      --soft-red: rgba(243, 154, 143, 0.15);
+      --soft-blue: rgba(139, 189, 241, 0.15);
+      --shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      line-height: 1.6;
+    }
+
+    header {
+      background: #0a0f16;
+      color: var(--ink);
+      padding: 28px 20px 24px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .wrap {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 0 18px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      line-height: 1.25;
+      font-weight: 760;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    main {
+      padding: 22px 0 40px;
+    }
+
+    section {
+      margin: 0 0 22px;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: 21px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      border-left: 5px solid var(--done);
+      background: #16261f;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    .meta {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 650;
+      white-space: nowrap;
+      border: 1px solid transparent;
+    }
+
+    .badge.done {
+      background: var(--soft-green);
+      color: var(--done);
+      border-color: rgba(125, 211, 167, 0.28);
+    }
+
+    .badge.wait {
+      background: var(--soft-yellow);
+      color: var(--wait);
+      border-color: rgba(242, 200, 117, 0.3);
+    }
+
+    .badge.soon {
+      background: var(--soft-red);
+      color: var(--soon);
+      border-color: rgba(243, 154, 143, 0.3);
+    }
+
+    .badge.info {
+      background: var(--soft-blue);
+      color: var(--blue);
+      border-color: rgba(139, 189, 241, 0.3);
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 1.25rem;
+    }
+
+    li {
+      margin: 5px 0;
+    }
+
+    .checklist {
+      list-style: none;
+      padding: 0;
+    }
+
+    .checklist li {
+      display: grid;
+      grid-template-columns: 26px minmax(0, 1fr);
+      gap: 8px;
+      align-items: start;
+      margin: 8px 0;
+    }
+
+    .box {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #98a2b3;
+      border-radius: 4px;
+      margin-top: 3px;
+      background: #101720;
+    }
+
+    .box.done {
+      border-color: var(--done);
+      background: var(--done);
+      position: relative;
+    }
+
+    .box.done::after {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: 1px;
+      width: 6px;
+      height: 11px;
+      border: solid #fff;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    table {
+      width: 100%;
+      min-width: 780px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--panel-2);
+      font-size: 14px;
+      color: #cdd6e2;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .date-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .date {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    .date strong {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    .date span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .note {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--blue);
+      border-radius: 8px;
+      padding: 14px 16px;
+      color: #d6dee9;
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 650;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 860px) {
+      .grid,
+      .date-strip {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 25px;
+      }
+
+      header {
+        padding-top: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>二階申請提醒</h1>
+      <p class="subtitle">更新：2026/04/21。先看已繳費，再看 4/30 起要上傳什麼。</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section>
+      <div class="grid">
+        <article class="card hero-card">
+          <div class="badge-row">
+            <span class="badge done">已繳費</span>
+            <span class="badge done">已入帳</span>
+            <span class="badge info">不用到校</span>
+          </div>
+          <h3>中正大學｜資訊工程學系</h3>
+          <p class="meta">下一步不是面試，是準備審查資料上傳。</p>
+          <ul class="checklist">
+            <li><span class="box done"></span><span>繳費已完成，入帳已確認。</span></li>
+            <li><span class="box"></span><span>4/30 09:00 起到甄選委員會上傳審查資料。</span></li>
+            <li><span class="box"></span><span>5/4 21:00 前完成上傳、確認，並留存確認表。</span></li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <div class="badge-row">
+            <span class="badge wait">4/28 中午起繳費</span>
+            <span class="badge soon">5/16 面試</span>
+          </div>
+          <h3>中山資工／中山資工全英</h3>
+          <p class="meta">兩個都在 5/16，要等 5/13 公告詳細時間與地點。</p>
+          <ul>
+            <li>4/28 12:00 起可繳費。</li>
+            <li>4/30 起上傳備審資料。</li>
+            <li>如果時段撞到，要盡早處理。</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <div class="badge-row">
+            <span class="badge wait">4/28 中午起繳費</span>
+            <span class="badge soon">5/18 面試</span>
+          </div>
+          <h3>中山大學｜資訊管理學系</h3>
+          <p class="meta">5/12 看正式面試時程，5/18 到校面試。</p>
+          <ul>
+            <li>4/28 12:00 起可繳費。</li>
+            <li>4/30 起上傳備審資料。</li>
+            <li>5/12 查正式時程。</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>中正資工要準備的上傳項目</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>分類</th>
+              <th>代碼</th>
+              <th>要準備什麼</th>
+              <th>提醒</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>修課紀錄</td>
+              <td>A</td>
+              <td>修課紀錄</td>
+              <td>英文、數學、自然／物理、總平均會被看。</td>
+            </tr>
+            <tr>
+              <td>課程學習成果</td>
+              <td>B／C／D</td>
+              <td>書面報告、實作作品、自然科學探究成果</td>
+              <td>最多 3 件。優先放資訊、自然科學、實作或作品型成果。</td>
+            </tr>
+            <tr>
+              <td>多元表現</td>
+              <td>F／J／L／M／N</td>
+              <td>自主學習、競賽、檢定證照、特殊表現、多元表現綜整心得</td>
+              <td>最多 10 件。重點是資工相關、自主學習、解決問題、反思。</td>
+            </tr>
+            <tr>
+              <td>學習歷程自述</td>
+              <td>O／P／Q</td>
+              <td>高中學習反思、就讀動機、未來學習計畫與生涯規劃</td>
+              <td>第一頁要放中正「申請入學個人資料表」，親自簽名後掃描，整併成一個 PDF。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>接下來日期</h2>
+      <div class="date-strip">
+        <div class="date">
+          <strong>4/28 12:00</strong>
+          <span>中山三系開始繳費。</span>
+        </div>
+        <div class="date">
+          <strong>4/30 09:00</strong>
+          <span>多數學校開始上傳審查資料。</span>
+        </div>
+        <div class="date">
+          <strong>5/4</strong>
+          <span>中正、中山、台科、雲科多數截止，時間不同要分開看。</span>
+        </div>
+        <div class="date">
+          <strong>5/5</strong>
+          <span>北科截止，5/5 21:00 前完成上傳。</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>總表</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>校系</th>
+              <th>繳費狀態</th>
+              <th>上傳截止</th>
+              <th>是否到校</th>
+              <th>現在要注意</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>中正資工</td>
+              <td><span class="badge done">已繳費／已入帳</span></td>
+              <td>5/4 21:00</td>
+              <td>不用到校</td>
+              <td>準備 A、B、C、D、F、J、L、M、N、O、P、Q；自述第一頁放個人資料表。</td>
+            </tr>
+            <tr>
+              <td>中山資工</td>
+              <td><span class="badge wait">4/28 中午起</span></td>
+              <td>5/4 21:00</td>
+              <td>5/16 到校</td>
+              <td>5/13 查教室；注意和中山全英同日。</td>
+            </tr>
+            <tr>
+              <td>中山資工全英</td>
+              <td><span class="badge wait">4/28 中午起</span></td>
+              <td>5/4 21:00</td>
+              <td>5/16 到校</td>
+              <td>5/13 查時間地點；準備英文自我介紹。</td>
+            </tr>
+            <tr>
+              <td>中山資管</td>
+              <td><span class="badge wait">4/28 中午起</span></td>
+              <td>5/4 21:00</td>
+              <td>5/18 到校</td>
+              <td>5/12 查正式面試時程。</td>
+            </tr>
+            <tr>
+              <td>雲科資工</td>
+              <td><span class="badge wait">4/30 起處理</span></td>
+              <td>5/4 21:00</td>
+              <td>5/16 到校</td>
+              <td>5/4 17:00 前完成報名；面試地點待公告。</td>
+            </tr>
+            <tr>
+              <td>台科資工</td>
+              <td><span class="badge wait">4/30 起處理</span></td>
+              <td>5/4 21:00</td>
+              <td>不用到校</td>
+              <td>完成網路報名與資料上傳，確認狀態。</td>
+            </tr>
+            <tr>
+              <td>北科資工</td>
+              <td><span class="badge wait">4/30 起處理</span></td>
+              <td>5/5 21:00</td>
+              <td>不用到校</td>
+              <td>5/5 23:59 前繳費；5/5 21:00 前完成上傳。</td>
+            </tr>
+            <tr>
+              <td>北大資工</td>
+              <td><span class="badge wait">待確認</span></td>
+              <td>待確認</td>
+              <td>待確認</td>
+              <td>官方二階資訊仍要再確認。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="note">
+      <strong>一句話版本：</strong>中正資工已繳費完成，不用面試；接下來最重要是 4/30 到 5/4 把審查資料上傳完成，尤其學習歷程自述第一頁要放中正個人資料表。
+    </section>
+  </main>
+</body>
+</html>
