@@ -259,49 +259,65 @@
       font-size: 14px;
     }
 
-    .tabs {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      display: grid;
-      grid-auto-flow: column;
-      grid-auto-columns: max-content;
-      gap: 4px;
-      overflow-x: auto;
-      margin: 0 0 18px;
-      padding: 6px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: #101720;
-      box-shadow: var(--shadow);
-    }
-
-    .tab {
-      min-height: 38px;
-      padding: 0 16px;
-      border: 0;
-      border-radius: 999px;
-      background: transparent;
-      color: var(--muted);
-      font: inherit;
-      font-size: 15px;
-      font-weight: 760;
-      white-space: nowrap;
-      cursor: pointer;
-    }
-
-    .tab.active {
-      background: var(--ink);
-      color: #101720;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
-    }
-
-    .tab-panel {
+    .page-panel {
       display: none;
     }
 
-    .tab-panel.active {
+    .page-panel.active {
       display: block;
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .nav-card {
+      min-height: 104px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      color: var(--ink);
+      text-align: left;
+      font: inherit;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+
+    .nav-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 19px;
+      line-height: 1.35;
+    }
+
+    .nav-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 0 0 16px;
+    }
+
+    .back-btn {
+      min-height: 38px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--panel-2);
+      color: var(--ink);
+      font: inherit;
+      font-size: 15px;
+      font-weight: 760;
+      cursor: pointer;
     }
 
     .note {
@@ -325,7 +341,8 @@
 
     @media (max-width: 860px) {
       .grid,
-      .date-strip {
+      .date-strip,
+      .nav-grid {
         grid-template-columns: 1fr;
       }
 
@@ -348,15 +365,57 @@
   </header>
 
   <main class="wrap">
-    <nav class="tabs" aria-label="二階提醒分頁">
-      <button class="tab active" type="button" data-tab="overview">總控</button>
-      <button class="tab" type="button" data-tab="upload">上傳項目</button>
-      <button class="tab" type="button" data-tab="dates">日期</button>
-      <button class="tab" type="button" data-tab="nsysu">中山交通</button>
-      <button class="tab" type="button" data-tab="all">總表</button>
-    </nav>
+    <div class="page-panel active" data-panel="home">
+      <section>
+        <div class="grid">
+          <article class="card hero-card">
+            <div class="badge-row">
+              <span class="badge wait">4/30 開始</span>
+              <span class="badge soon">5/4 / 5/5 截止</span>
+            </div>
+            <h3>二階申請入口</h3>
+            <p class="meta">現在重點是上傳審查資料、台科北科報名繳費、中山面試追蹤。</p>
+            <ul class="checklist">
+              <li><span class="box"></span><span>先看「總控」確認今天要做什麼。</span></li>
+              <li><span class="box"></span><span>上傳前看「上傳項目」。</span></li>
+              <li><span class="box"></span><span>出發前看「中山交通」。</span></li>
+            </ul>
+          </article>
+        </div>
+      </section>
 
-    <div class="tab-panel active" data-panel="overview">
+      <section>
+        <h2>選一個進去</h2>
+        <div class="nav-grid">
+          <button class="nav-card" type="button" data-open-page="overview">
+            <strong>總控</strong>
+            <span>目前待辦、台科北科、中山面試追蹤。</span>
+          </button>
+          <button class="nav-card" type="button" data-open-page="upload">
+            <strong>上傳項目</strong>
+            <span>各校系審查資料代碼與準備方向。</span>
+          </button>
+          <button class="nav-card" type="button" data-open-page="dates">
+            <strong>日期</strong>
+            <span>4/30、5/4、5/5 等關鍵期限。</span>
+          </button>
+          <button class="nav-card" type="button" data-open-page="nsysu">
+            <strong>中山交通</strong>
+            <span>中山公告、上傳連結、停車 PDF。</span>
+          </button>
+          <button class="nav-card" type="button" data-open-page="all">
+            <strong>總表</strong>
+            <span>所有校系狀態，包含不報名與一階未通過。</span>
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <div class="page-panel" data-panel="overview">
+    <div class="top-actions">
+      <button class="back-btn" type="button" data-back>← 返回首頁</button>
+      <span class="meta">總控</span>
+    </div>
     <section>
       <div class="grid">
         <article class="card hero-card">
@@ -459,7 +518,11 @@
     </section>
     </div>
 
-    <div class="tab-panel" data-panel="upload">
+    <div class="page-panel" data-panel="upload">
+    <div class="top-actions">
+      <button class="back-btn" type="button" data-back>← 返回首頁</button>
+      <span class="meta">上傳項目</span>
+    </div>
     <section>
       <h2>各校系要準備的上傳項目</h2>
       <div class="table-wrap">
@@ -515,7 +578,11 @@
     </section>
     </div>
 
-    <div class="tab-panel" data-panel="dates">
+    <div class="page-panel" data-panel="dates">
+    <div class="top-actions">
+      <button class="back-btn" type="button" data-back>← 返回首頁</button>
+      <span class="meta">日期</span>
+    </div>
     <section>
       <h2>接下來日期</h2>
       <div class="date-strip">
@@ -539,7 +606,11 @@
     </section>
     </div>
 
-    <div class="tab-panel" data-panel="nsysu">
+    <div class="page-panel" data-panel="nsysu">
+    <div class="top-actions">
+      <button class="back-btn" type="button" data-back>← 返回首頁</button>
+      <span class="meta">中山交通</span>
+    </div>
     <section>
       <h2>中山連結與停車</h2>
       <div class="table-wrap">
@@ -577,7 +648,11 @@
     </section>
     </div>
 
-    <div class="tab-panel" data-panel="all">
+    <div class="page-panel" data-panel="all">
+    <div class="top-actions">
+      <button class="back-btn" type="button" data-back>← 返回首頁</button>
+      <span class="meta">總表</span>
+    </div>
     <section>
       <h2>總表</h2>
       <div class="table-wrap">
@@ -666,30 +741,29 @@
     </div>
   </main>
   <script>
-    const tabs = document.querySelectorAll("[data-tab]");
     const panels = document.querySelectorAll("[data-panel]");
 
-    function activateTab(name) {
-      tabs.forEach((tab) => {
-        const active = tab.dataset.tab === name;
-        tab.classList.toggle("active", active);
-        tab.setAttribute("aria-selected", active ? "true" : "false");
-      });
+    function openPage(name) {
       panels.forEach((panel) => {
         panel.classList.toggle("active", panel.dataset.panel === name);
       });
       const url = new URL(window.location);
-      url.hash = name;
+      url.hash = name === "home" ? "" : name;
       history.replaceState(null, "", url);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    tabs.forEach((tab) => {
-      tab.addEventListener("click", () => activateTab(tab.dataset.tab));
+    document.querySelectorAll("[data-open-page]").forEach((button) => {
+      button.addEventListener("click", () => openPage(button.dataset.openPage));
+    });
+
+    document.querySelectorAll("[data-back]").forEach((button) => {
+      button.addEventListener("click", () => openPage("home"));
     });
 
     const initial = window.location.hash.replace("#", "");
     if (initial && document.querySelector(`[data-panel="${initial}"]`)) {
-      activateTab(initial);
+      openPage(initial);
     }
   </script>
 </body>
