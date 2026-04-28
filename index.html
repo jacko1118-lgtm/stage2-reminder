@@ -259,6 +259,51 @@
       font-size: 14px;
     }
 
+    .tabs {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: max-content;
+      gap: 4px;
+      overflow-x: auto;
+      margin: 0 0 18px;
+      padding: 6px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #101720;
+      box-shadow: var(--shadow);
+    }
+
+    .tab {
+      min-height: 38px;
+      padding: 0 16px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      font: inherit;
+      font-size: 15px;
+      font-weight: 760;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .tab.active {
+      background: var(--ink);
+      color: #101720;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
     .note {
       background: var(--panel);
       border: 1px solid var(--line);
@@ -303,6 +348,15 @@
   </header>
 
   <main class="wrap">
+    <nav class="tabs" aria-label="二階提醒分頁">
+      <button class="tab active" type="button" data-tab="overview">總控</button>
+      <button class="tab" type="button" data-tab="upload">上傳項目</button>
+      <button class="tab" type="button" data-tab="dates">日期</button>
+      <button class="tab" type="button" data-tab="nsysu">中山交通</button>
+      <button class="tab" type="button" data-tab="all">總表</button>
+    </nav>
+
+    <div class="tab-panel active" data-panel="overview">
     <section>
       <div class="grid">
         <article class="card hero-card">
@@ -403,7 +457,9 @@
         </table>
       </div>
     </section>
+    </div>
 
+    <div class="tab-panel" data-panel="upload">
     <section>
       <h2>各校系要準備的上傳項目</h2>
       <div class="table-wrap">
@@ -457,7 +513,9 @@
         </table>
       </div>
     </section>
+    </div>
 
+    <div class="tab-panel" data-panel="dates">
     <section>
       <h2>接下來日期</h2>
       <div class="date-strip">
@@ -479,7 +537,9 @@
         </div>
       </div>
     </section>
+    </div>
 
+    <div class="tab-panel" data-panel="nsysu">
     <section>
       <h2>中山連結與停車</h2>
       <div class="table-wrap">
@@ -515,7 +575,9 @@
         </table>
       </div>
     </section>
+    </div>
 
+    <div class="tab-panel" data-panel="all">
     <section>
       <h2>總表</h2>
       <div class="table-wrap">
@@ -601,6 +663,34 @@
     <section class="note">
       <strong>一句話版本：</strong>4/30 先處理審查資料上傳和台科、北科報名；5/4 前收掉中正、中山三系、台科；5/5 前收掉北科。雲科、北大、成大不用處理。
     </section>
+    </div>
   </main>
+  <script>
+    const tabs = document.querySelectorAll("[data-tab]");
+    const panels = document.querySelectorAll("[data-panel]");
+
+    function activateTab(name) {
+      tabs.forEach((tab) => {
+        const active = tab.dataset.tab === name;
+        tab.classList.toggle("active", active);
+        tab.setAttribute("aria-selected", active ? "true" : "false");
+      });
+      panels.forEach((panel) => {
+        panel.classList.toggle("active", panel.dataset.panel === name);
+      });
+      const url = new URL(window.location);
+      url.hash = name;
+      history.replaceState(null, "", url);
+    }
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => activateTab(tab.dataset.tab));
+    });
+
+    const initial = window.location.hash.replace("#", "");
+    if (initial && document.querySelector(`[data-panel="${initial}"]`)) {
+      activateTab(initial);
+    }
+  </script>
 </body>
 </html>
