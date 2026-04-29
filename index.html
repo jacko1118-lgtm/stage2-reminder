@@ -275,15 +275,32 @@
 
     .nav-card {
       min-height: 118px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
       padding: 16px;
-      border: 1px solid var(--line);
+      border: 1px solid rgba(139, 189, 241, 0.34);
       border-radius: 8px;
       background: var(--panel);
       color: var(--ink);
       text-align: left;
       font: inherit;
       cursor: pointer;
-      box-shadow: var(--shadow);
+      box-shadow: var(--shadow), inset 0 -3px 0 rgba(139, 189, 241, 0.18);
+      transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    .nav-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(139, 189, 241, 0.72);
+      background: #202b38;
+      box-shadow: 0 22px 48px rgba(0, 0, 0, 0.36), inset 0 -4px 0 rgba(139, 189, 241, 0.38);
+    }
+
+    .nav-card:focus-visible {
+      outline: 3px solid rgba(139, 189, 241, 0.72);
+      outline-offset: 3px;
     }
 
     .nav-card.primary {
@@ -303,10 +320,46 @@
       line-height: 1.35;
     }
 
-    .nav-card span {
+    .nav-desc {
       display: block;
       color: var(--muted);
       font-size: 14px;
+    }
+
+    .nav-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      width: 100%;
+      min-height: 32px;
+      margin-top: auto;
+      padding: 5px 9px;
+      border: 1px solid rgba(139, 189, 241, 0.32);
+      border-radius: 999px;
+      background: rgba(139, 189, 241, 0.12);
+      color: var(--blue);
+      font-size: 13px;
+      font-weight: 760;
+      line-height: 1.2;
+    }
+
+    .nav-action::after {
+      content: "→";
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .nav-card.primary .nav-action {
+      border-color: rgba(125, 211, 167, 0.38);
+      background: rgba(125, 211, 167, 0.14);
+      color: var(--done);
+    }
+
+    .nav-card.warning .nav-action {
+      border-color: rgba(242, 200, 117, 0.38);
+      background: rgba(242, 200, 117, 0.14);
+      color: var(--wait);
     }
 
     .home-dashboard {
@@ -554,23 +607,28 @@
         <div class="nav-grid">
           <button class="nav-card primary" type="button" data-open-page="overview">
             <strong>總控</strong>
-            <span>目前待辦、台科北科、中山面試追蹤。</span>
+            <span class="nav-desc">目前待辦、台科北科、中山面試追蹤。</span>
+            <span class="nav-action">點進去看總控</span>
           </button>
           <button class="nav-card warning" type="button" data-open-page="upload">
             <strong>上傳項目</strong>
-            <span>各校系審查資料代碼與準備方向。</span>
+            <span class="nav-desc">各校系審查資料代碼與準備方向。</span>
+            <span class="nav-action">點進去看項目</span>
           </button>
           <button class="nav-card" type="button" data-open-page="dates">
             <strong>日期</strong>
-            <span>4/30、5/4、5/5 等關鍵期限。</span>
+            <span class="nav-desc">4/30、5/4、5/5 等關鍵期限。</span>
+            <span class="nav-action">點進去看日期</span>
           </button>
           <button class="nav-card" type="button" data-open-page="nsysu">
             <strong>中山交通</strong>
-            <span>中山公告、上傳連結、停車 PDF。</span>
+            <span class="nav-desc">中山公告、上傳連結、停車 PDF。</span>
+            <span class="nav-action">點進去看交通</span>
           </button>
           <button class="nav-card" type="button" data-open-page="all">
             <strong>總表</strong>
-            <span>所有校系狀態，包含不報名與一階未通過。</span>
+            <span class="nav-desc">所有校系狀態，包含不報名與一階未通過。</span>
+            <span class="nav-action">點進去看總表</span>
           </button>
         </div>
       </section>
