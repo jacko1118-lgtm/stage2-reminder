@@ -269,12 +269,12 @@
 
     .nav-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 14px;
     }
 
     .nav-card {
-      min-height: 104px;
+      min-height: 118px;
       padding: 16px;
       border: 1px solid var(--line);
       border-radius: 8px;
@@ -284,6 +284,16 @@
       font: inherit;
       cursor: pointer;
       box-shadow: var(--shadow);
+    }
+
+    .nav-card.primary {
+      background: #16261f;
+      border-color: rgba(125, 211, 167, 0.36);
+    }
+
+    .nav-card.warning {
+      background: #2a2418;
+      border-color: rgba(242, 200, 117, 0.36);
     }
 
     .nav-card strong {
@@ -297,6 +307,103 @@
       display: block;
       color: var(--muted);
       font-size: 14px;
+    }
+
+    .home-dashboard {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .home-card {
+      min-height: 100%;
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin: 0 0 14px;
+    }
+
+    .status-tile {
+      min-height: 96px;
+      padding: 13px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel-2);
+    }
+
+    .status-tile strong {
+      display: block;
+      margin-bottom: 2px;
+      font-size: 28px;
+      line-height: 1.1;
+    }
+
+    .status-tile span {
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .priority-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .priority-item {
+      display: grid;
+      grid-template-columns: 82px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      padding: 10px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .priority-item:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .priority-time {
+      color: var(--wait);
+      font-weight: 760;
+      line-height: 1.35;
+    }
+
+    .priority-text strong {
+      display: block;
+      margin-bottom: 2px;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    .priority-text span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .compact-summary {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .mini-block {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+
+    .mini-block h3 {
+      margin: 0 0 8px;
+      font-size: 17px;
+      line-height: 1.35;
     }
 
     .top-actions {
@@ -342,8 +449,14 @@
     @media (max-width: 860px) {
       .grid,
       .date-strip,
-      .nav-grid {
+      .nav-grid,
+      .home-dashboard,
+      .compact-summary {
         grid-template-columns: 1fr;
+      }
+
+      .status-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
       h1 {
@@ -352,6 +465,17 @@
 
       header {
         padding-top: 22px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .status-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .priority-item {
+        grid-template-columns: 1fr;
+        gap: 4px;
       }
     }
   </style>
@@ -367,31 +491,72 @@
   <main class="wrap">
     <div class="page-panel active" data-panel="home">
       <section>
-        <div class="grid">
-          <article class="card hero-card">
+        <div class="home-dashboard">
+          <article class="card hero-card home-card">
             <div class="badge-row">
               <span class="badge wait">4/30 開始</span>
               <span class="badge soon">5/4 / 5/5 截止</span>
             </div>
-            <h3>二階申請入口</h3>
-            <p class="meta">現在重點是上傳審查資料、台科北科報名繳費、中山面試追蹤。</p>
+            <h3>現在先收 6 個待辦校系</h3>
+            <p class="meta">中正、中山三系、台科、北科都從 4/30 起進入上傳與確認期；雲科、北大、成大不用再追。</p>
+            <div class="status-grid">
+              <div class="status-tile">
+                <strong>4</strong>
+                <span>已完成報名或繳費，等上傳審查資料。</span>
+              </div>
+              <div class="status-tile">
+                <strong>2</strong>
+                <span>4/30 起處理報名、繳費或上傳。</span>
+              </div>
+              <div class="status-tile">
+                <strong>3</strong>
+                <span>已決定不用處理，避免分心。</span>
+              </div>
+            </div>
             <ul class="checklist">
-              <li><span class="box"></span><span>先看「總控」確認今天要做什麼。</span></li>
-              <li><span class="box"></span><span>上傳前看「上傳項目」。</span></li>
-              <li><span class="box"></span><span>出發前看「中山交通」。</span></li>
+              <li><span class="box"></span><span>4/30 先開上傳系統，確認每個校系項目與檔案狀態。</span></li>
+              <li><span class="box"></span><span>台科、北科先完成報名流程，再回頭檢查上傳與確認表。</span></li>
+              <li><span class="box"></span><span>每一校系上傳後都下載或截圖確認頁，避免事後查不到。</span></li>
             </ul>
           </article>
+
+          <aside class="card home-card">
+            <h3>最靠近的時間線</h3>
+            <div class="priority-list">
+              <div class="priority-item">
+                <div class="priority-time">4/30</div>
+                <div class="priority-text">
+                  <strong>上傳系統開放</strong>
+                  <span>中正、中山三系、台科、北科都要開始確認資料。</span>
+                </div>
+              </div>
+              <div class="priority-item">
+                <div class="priority-time">5/4 21:00</div>
+                <div class="priority-text">
+                  <strong>第一波收件線</strong>
+                  <span>中正、中山三系、台科要完成上傳與確認。</span>
+                </div>
+              </div>
+              <div class="priority-item">
+                <div class="priority-time">5/5</div>
+                <div class="priority-text">
+                  <strong>北科最後線</strong>
+                  <span>21:00 前上傳，23:59 前繳費完成。</span>
+                </div>
+              </div>
+            </div>
+          </aside>
         </div>
       </section>
 
       <section>
         <h2>選一個進去</h2>
         <div class="nav-grid">
-          <button class="nav-card" type="button" data-open-page="overview">
+          <button class="nav-card primary" type="button" data-open-page="overview">
             <strong>總控</strong>
             <span>目前待辦、台科北科、中山面試追蹤。</span>
           </button>
-          <button class="nav-card" type="button" data-open-page="upload">
+          <button class="nav-card warning" type="button" data-open-page="upload">
             <strong>上傳項目</strong>
             <span>各校系審查資料代碼與準備方向。</span>
           </button>
@@ -407,6 +572,30 @@
             <strong>總表</strong>
             <span>所有校系狀態，包含不報名與一階未通過。</span>
           </button>
+        </div>
+      </section>
+
+      <section>
+        <h2>首頁快速判讀</h2>
+        <div class="compact-summary">
+          <div class="mini-block">
+            <h3>已經安心的部分</h3>
+            <div class="badge-row">
+              <span class="badge done">中山三系已報名</span>
+              <span class="badge done">應考證已列印</span>
+              <span class="badge done">中正已入帳</span>
+            </div>
+            <p class="meta">這幾項現在不用重做，接下來只追上傳、確認與中山面試時間。</p>
+          </div>
+          <div class="mini-block">
+            <h3>不用再花力氣的部分</h3>
+            <div class="badge-row">
+              <span class="badge done">雲科不報名</span>
+              <span class="badge done">北大不報名</span>
+              <span class="badge done">成大一階未通過</span>
+            </div>
+            <p class="meta">這三個不用追繳費、上傳、面試，避免混進待辦清單。</p>
+          </div>
         </div>
       </section>
     </div>
