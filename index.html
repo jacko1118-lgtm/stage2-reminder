@@ -274,6 +274,7 @@
     }
 
     .nav-card {
+      position: relative;
       min-height: 118px;
       display: flex;
       flex-direction: column;
@@ -289,6 +290,25 @@
       cursor: pointer;
       box-shadow: var(--shadow), inset 0 -3px 0 rgba(139, 189, 241, 0.18);
       transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    .nav-card::before {
+      content: "☝";
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border: 1px solid rgba(139, 189, 241, 0.38);
+      border-radius: 999px;
+      background: rgba(139, 189, 241, 0.14);
+      color: var(--blue);
+      font-size: 17px;
+      line-height: 1;
+      transform-origin: 50% 80%;
+      animation: tapHint 1.8s ease-in-out infinite;
     }
 
     .nav-card:hover {
@@ -360,6 +380,22 @@
       border-color: rgba(242, 200, 117, 0.38);
       background: rgba(242, 200, 117, 0.14);
       color: var(--wait);
+    }
+
+    @keyframes tapHint {
+      0%,
+      76%,
+      100% {
+        transform: translateY(0) scale(1);
+      }
+
+      84% {
+        transform: translateY(2px) scale(0.92);
+      }
+
+      92% {
+        transform: translateY(0) scale(1.04);
+      }
     }
 
     .home-dashboard {
@@ -989,15 +1025,33 @@
   </main>
   <script>
     const panels = document.querySelectorAll("[data-panel]");
+    const panelNames = Array.from(panels).map((panel) => panel.dataset.panel);
 
-    function openPage(name) {
+    function isValidPanel(name) {
+      return panelNames.includes(name);
+    }
+
+    function getPanelFromHash() {
+      const name = window.location.hash.replace("#", "");
+      return isValidPanel(name) ? name : "home";
+    }
+
+    function showPage(name) {
       panels.forEach((panel) => {
         panel.classList.toggle("active", panel.dataset.panel === name);
       });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function makeUrl(name) {
       const url = new URL(window.location);
       url.hash = name === "home" ? "" : name;
-      history.replaceState(null, "", url);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      return url;
+    }
+
+    function openPage(name) {
+      showPage(name);
+      history.pushState({ panel: name }, "", makeUrl(name));
     }
 
     document.querySelectorAll("[data-open-page]").forEach((button) => {
@@ -1005,13 +1059,22 @@
     });
 
     document.querySelectorAll("[data-back]").forEach((button) => {
-      button.addEventListener("click", () => openPage("home"));
+      button.addEventListener("click", () => {
+        if (getPanelFromHash() === "home") {
+          showPage("home");
+          history.replaceState({ panel: "home" }, "", makeUrl("home"));
+          return;
+        }
+        history.back();
+      });
     });
 
-    const initial = window.location.hash.replace("#", "");
-    if (initial && document.querySelector(`[data-panel="${initial}"]`)) {
-      openPage(initial);
-    }
+    window.addEventListener("popstate", () => {
+      showPage(getPanelFromHash());
+    });
+
+    showPage(getPanelFromHash());
+    history.replaceState({ panel: getPanelFromHash() }, "", makeUrl(getPanelFromHash()));
   </script>
 </body>
 </html>
