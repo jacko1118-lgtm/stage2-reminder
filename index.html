@@ -4,29 +4,31 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>二階申請提醒</title>
+  <title>備審資料 AI 建議總覽</title>
   <style>
     :root {
       color-scheme: dark;
-      --bg: #0f141b;
-      --ink: #e8edf3;
-      --muted: #a7b0bd;
-      --line: #2b3543;
-      --panel: #171f29;
-      --panel-2: #1d2733;
-      --done: #7dd3a7;
-      --wait: #f2c875;
-      --soon: #f39a8f;
-      --blue: #8bbdf1;
-      --soft-green: rgba(125, 211, 167, 0.14);
-      --soft-yellow: rgba(242, 200, 117, 0.16);
-      --soft-red: rgba(243, 154, 143, 0.15);
-      --soft-blue: rgba(139, 189, 241, 0.15);
-      --shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
+      --bg: #111417;
+      --ink: #eef2f5;
+      --muted: #aeb7c2;
+      --line: #303943;
+      --panel: #1a2027;
+      --panel-2: #202832;
+      --green: #83d6a1;
+      --gold: #f0c36d;
+      --blue: #8fc5ff;
+      --rose: #f1979a;
+      --violet: #bba5ff;
+      --cyan: #82d8dd;
+      --shadow: 0 18px 42px rgba(0, 0, 0, 0.34);
     }
 
     * {
       box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
@@ -34,14 +36,12 @@
       background: var(--bg);
       color: var(--ink);
       font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
-      line-height: 1.6;
+      line-height: 1.68;
     }
 
     header {
-      background: #0a0f16;
-      color: var(--ink);
-      padding: 28px 20px 24px;
       border-bottom: 1px solid var(--line);
+      background: #0c1116;
     }
 
     .wrap {
@@ -50,63 +50,123 @@
       padding: 0 18px;
     }
 
+    .hero {
+      min-height: 34vh;
+      display: grid;
+      align-content: end;
+      padding: 48px 0 26px;
+    }
+
     h1 {
-      margin: 0 0 8px;
-      font-size: 30px;
-      line-height: 1.25;
-      font-weight: 760;
+      max-width: 880px;
+      margin: 0 0 10px;
+      font-size: clamp(28px, 5vw, 48px);
+      line-height: 1.18;
       letter-spacing: 0;
     }
 
     .subtitle {
+      max-width: 800px;
       margin: 0;
       color: var(--muted);
-      font-size: 16px;
+      font-size: 17px;
     }
 
     main {
-      padding: 22px 0 40px;
+      padding: 24px 0 44px;
     }
 
     section {
-      margin: 0 0 22px;
+      margin: 0 0 24px;
     }
 
     h2 {
       margin: 0 0 12px;
-      font-size: 21px;
+      font-size: 23px;
       line-height: 1.35;
       letter-spacing: 0;
     }
 
-    .grid {
+    h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      line-height: 1.38;
+      letter-spacing: 0;
+    }
+
+    h4 {
+      margin: 18px 0 8px;
+      font-size: 16px;
+      line-height: 1.4;
+      color: #dce5ee;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0 0 10px;
+    }
+
+    ul,
+    ol {
+      margin: 0;
+      padding-left: 1.2rem;
+    }
+
+    li {
+      margin: 6px 0;
+    }
+
+    .page-panel {
+      display: none;
+    }
+
+    .page-panel.active {
+      display: block;
+    }
+
+    .dashboard {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
       gap: 14px;
     }
 
     .card {
-      background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 8px;
+      background: var(--panel);
       padding: 16px;
       box-shadow: var(--shadow);
     }
 
-    .hero-card {
-      border-left: 5px solid var(--done);
-      background: #16261f;
+    .lead-card {
+      border-left: 5px solid var(--green);
+      background: #17241f;
     }
 
-    .card h3 {
-      margin: 0 0 8px;
-      font-size: 18px;
-      line-height: 1.35;
-      letter-spacing: 0;
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
     }
 
+    .mini-card {
+      min-height: 112px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel-2);
+      padding: 13px;
+    }
+
+    .mini-card strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 22px;
+      line-height: 1.18;
+    }
+
+    .mini-card span,
     .meta {
-      margin: 0 0 10px;
       color: var(--muted);
       font-size: 14px;
     }
@@ -123,252 +183,97 @@
       align-items: center;
       min-height: 28px;
       padding: 4px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
       border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
       font-size: 14px;
-      font-weight: 650;
+      font-weight: 720;
       white-space: nowrap;
-      border: 1px solid transparent;
     }
 
-    .badge.done {
-      background: var(--soft-green);
-      color: var(--done);
-      border-color: rgba(125, 211, 167, 0.28);
+    .badge.green {
+      color: var(--green);
+      background: rgba(131, 214, 161, 0.13);
+      border-color: rgba(131, 214, 161, 0.3);
     }
 
-    .badge.wait {
-      background: var(--soft-yellow);
-      color: var(--wait);
-      border-color: rgba(242, 200, 117, 0.3);
+    .badge.gold {
+      color: var(--gold);
+      background: rgba(240, 195, 109, 0.13);
+      border-color: rgba(240, 195, 109, 0.3);
     }
 
-    .badge.soon {
-      background: var(--soft-red);
-      color: var(--soon);
-      border-color: rgba(243, 154, 143, 0.3);
-    }
-
-    .badge.info {
-      background: var(--soft-blue);
+    .badge.blue {
       color: var(--blue);
-      border-color: rgba(139, 189, 241, 0.3);
-    }
-
-    ul {
-      margin: 0;
-      padding-left: 1.25rem;
-    }
-
-    li {
-      margin: 5px 0;
-    }
-
-    .checklist {
-      list-style: none;
-      padding: 0;
-    }
-
-    .checklist li {
-      display: grid;
-      grid-template-columns: 26px minmax(0, 1fr);
-      gap: 8px;
-      align-items: start;
-      margin: 8px 0;
-    }
-
-    .box {
-      width: 20px;
-      height: 20px;
-      border: 2px solid #98a2b3;
-      border-radius: 4px;
-      margin-top: 3px;
-      background: #101720;
-    }
-
-    .box.done {
-      border-color: var(--done);
-      background: var(--done);
-      position: relative;
-    }
-
-    .box.done::after {
-      content: "";
-      position: absolute;
-      left: 5px;
-      top: 1px;
-      width: 6px;
-      height: 11px;
-      border: solid #fff;
-      border-width: 0 2px 2px 0;
-      transform: rotate(45deg);
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      box-shadow: var(--shadow);
-    }
-
-    table {
-      width: 100%;
-      min-width: 780px;
-      border-collapse: collapse;
-    }
-
-    th,
-    td {
-      padding: 12px 14px;
-      text-align: left;
-      border-bottom: 1px solid var(--line);
-      vertical-align: top;
-    }
-
-    th {
-      background: var(--panel-2);
-      font-size: 14px;
-      color: #cdd6e2;
-    }
-
-    tr:last-child td {
-      border-bottom: 0;
-    }
-
-    .date-strip {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .date {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 14px;
-    }
-
-    .date strong {
-      display: block;
-      font-size: 18px;
-      margin-bottom: 5px;
-    }
-
-    .date span {
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .page-panel {
-      display: none;
-    }
-
-    .page-panel.active {
-      display: block;
+      background: rgba(143, 197, 255, 0.13);
+      border-color: rgba(143, 197, 255, 0.3);
     }
 
     .nav-grid {
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 14px;
+      margin-top: 8px;
     }
 
     .nav-card {
-      min-height: 118px;
+      min-height: 154px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       gap: 12px;
-      padding: 16px;
-      border: 1px solid rgba(139, 189, 241, 0.58);
+      padding: 17px;
+      border: 1px solid rgba(255, 255, 255, 0.24);
       border-radius: 8px;
-      background: linear-gradient(160deg, #23344a 0%, #151d29 72%);
       color: var(--ink);
       text-align: left;
       font: inherit;
       cursor: pointer;
-      box-shadow: 0 18px 0 #0a0f16, 0 28px 54px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.14), inset 0 -5px 0 rgba(139, 189, 241, 0.3);
       transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
-      animation: cardTapHint 2.4s ease-in-out infinite;
+      animation: cardTapHint 2.5s ease-in-out infinite;
     }
 
     .nav-card:nth-child(1) {
-      background: linear-gradient(160deg, #1f5b45 0%, #13281f 72%);
-      border-color: rgba(125, 211, 167, 0.72);
-      box-shadow: 0 18px 0 #07120e, 0 28px 54px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -5px 0 rgba(125, 211, 167, 0.36);
+      background: linear-gradient(160deg, #245f47 0%, #14291f 76%);
+      border-color: rgba(131, 214, 161, 0.76);
+      box-shadow: 0 18px 0 #07130e, 0 28px 54px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.16), inset 0 -5px 0 rgba(131, 214, 161, 0.36);
     }
 
     .nav-card:nth-child(2) {
-      background: linear-gradient(160deg, #72511d 0%, #2c2113 72%);
-      border-color: rgba(242, 200, 117, 0.76);
-      box-shadow: 0 18px 0 #140f08, 0 28px 54px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -5px 0 rgba(242, 200, 117, 0.36);
-      animation-delay: 0.08s;
+      background: linear-gradient(160deg, #7b5620 0%, #2d2111 76%);
+      border-color: rgba(240, 195, 109, 0.78);
+      box-shadow: 0 18px 0 #140f07, 0 28px 54px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.16), inset 0 -5px 0 rgba(240, 195, 109, 0.36);
+      animation-delay: 0.1s;
     }
 
     .nav-card:nth-child(3) {
-      background: linear-gradient(160deg, #265f86 0%, #142535 72%);
-      border-color: rgba(139, 189, 241, 0.76);
-      box-shadow: 0 18px 0 #07111a, 0 28px 54px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -5px 0 rgba(139, 189, 241, 0.36);
-      animation-delay: 0.16s;
-    }
-
-    .nav-card:nth-child(4) {
-      background: linear-gradient(160deg, #7b3f48 0%, #2c171d 72%);
-      border-color: rgba(243, 154, 143, 0.76);
-      box-shadow: 0 18px 0 #15090c, 0 28px 54px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -5px 0 rgba(243, 154, 143, 0.36);
-      animation-delay: 0.24s;
-    }
-
-    .nav-card:nth-child(5) {
-      background: linear-gradient(160deg, #564b8b 0%, #201b35 72%);
-      border-color: rgba(190, 174, 255, 0.76);
-      box-shadow: 0 18px 0 #0e0a1a, 0 28px 54px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -5px 0 rgba(190, 174, 255, 0.36);
-      animation-delay: 0.32s;
+      background: linear-gradient(160deg, #285f86 0%, #142737 76%);
+      border-color: rgba(143, 197, 255, 0.78);
+      box-shadow: 0 18px 0 #07131d, 0 28px 54px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.16), inset 0 -5px 0 rgba(143, 197, 255, 0.36);
+      animation-delay: 0.2s;
     }
 
     .nav-card:hover {
       animation-play-state: paused;
       transform: translateY(-8px);
-      border-color: rgba(139, 189, 241, 0.82);
-      background: linear-gradient(160deg, #3372a0 0%, #172c42 72%);
-      box-shadow: 0 24px 0 #07111a, 0 36px 64px rgba(0, 0, 0, 0.56), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -6px 0 rgba(139, 189, 241, 0.52);
+      filter: brightness(1.12);
     }
 
-    .nav-card:focus-visible {
-      outline: 3px solid rgba(139, 189, 241, 0.72);
+    .nav-card:focus-visible,
+    .back-btn:focus-visible {
+      outline: 3px solid rgba(143, 197, 255, 0.72);
       outline-offset: 3px;
-    }
-
-    .nav-card.primary {
-      border-color: rgba(125, 211, 167, 0.36);
-    }
-
-    .nav-card.primary:hover {
-      background: linear-gradient(160deg, #2c7a5d 0%, #17362a 72%);
-      border-color: rgba(125, 211, 167, 0.8);
-      box-shadow: 0 24px 0 #07120e, 0 36px 64px rgba(0, 0, 0, 0.56), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -6px 0 rgba(125, 211, 167, 0.54);
-    }
-
-    .nav-card.warning {
-      border-color: rgba(242, 200, 117, 0.36);
-    }
-
-    .nav-card.warning:hover {
-      background: linear-gradient(160deg, #936821 0%, #3a2a15 72%);
-      border-color: rgba(242, 200, 117, 0.82);
-      box-shadow: 0 24px 0 #140f08, 0 36px 64px rgba(0, 0, 0, 0.56), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -6px 0 rgba(242, 200, 117, 0.54);
     }
 
     .nav-card strong {
       display: block;
-      margin-bottom: 6px;
-      font-size: 19px;
-      line-height: 1.35;
+      margin-bottom: 5px;
+      font-size: 22px;
+      line-height: 1.32;
     }
 
     .nav-desc {
-      display: block;
-      color: var(--muted);
+      color: rgba(238, 242, 245, 0.78);
       font-size: 14px;
     }
 
@@ -376,16 +281,13 @@
       display: inline-flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
       width: 100%;
-      min-height: 32px;
-      margin-top: auto;
-      padding: 5px 9px;
-      border: 1px solid rgba(139, 189, 241, 0.32);
+      min-height: 34px;
+      padding: 6px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.24);
       border-radius: 999px;
-      background: rgba(139, 189, 241, 0.12);
-      color: var(--blue);
-      font-size: 13px;
+      background: rgba(255, 255, 255, 0.1);
+      font-size: 14px;
       font-weight: 760;
       line-height: 1.2;
     }
@@ -394,18 +296,6 @@
       content: "→";
       font-size: 18px;
       line-height: 1;
-    }
-
-    .nav-card.primary .nav-action {
-      border-color: rgba(125, 211, 167, 0.38);
-      background: rgba(125, 211, 167, 0.14);
-      color: var(--done);
-    }
-
-    .nav-card.warning .nav-action {
-      border-color: rgba(242, 200, 117, 0.38);
-      background: rgba(242, 200, 117, 0.14);
-      color: var(--wait);
     }
 
     @keyframes cardTapHint {
@@ -424,103 +314,6 @@
       }
     }
 
-    .home-dashboard {
-      display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
-      gap: 14px;
-      align-items: stretch;
-    }
-
-    .home-card {
-      min-height: 100%;
-    }
-
-    .status-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin: 0 0 14px;
-    }
-
-    .status-tile {
-      min-height: 96px;
-      padding: 13px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--panel-2);
-    }
-
-    .status-tile strong {
-      display: block;
-      margin-bottom: 2px;
-      font-size: 28px;
-      line-height: 1.1;
-    }
-
-    .status-tile span {
-      display: block;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.4;
-    }
-
-    .priority-list {
-      display: grid;
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .priority-item {
-      display: grid;
-      grid-template-columns: 82px minmax(0, 1fr);
-      gap: 12px;
-      align-items: start;
-      padding: 10px 0;
-      border-top: 1px solid var(--line);
-    }
-
-    .priority-item:first-child {
-      border-top: 0;
-      padding-top: 0;
-    }
-
-    .priority-time {
-      color: var(--wait);
-      font-weight: 760;
-      line-height: 1.35;
-    }
-
-    .priority-text strong {
-      display: block;
-      margin-bottom: 2px;
-      font-size: 16px;
-      line-height: 1.35;
-    }
-
-    .priority-text span {
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .compact-summary {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .mini-block {
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--panel);
-    }
-
-    .mini-block h3 {
-      margin: 0 0 8px;
-      font-size: 17px;
-      line-height: 1.35;
-    }
-
     .top-actions {
       display: flex;
       align-items: center;
@@ -530,7 +323,7 @@
     }
 
     .back-btn {
-      min-height: 38px;
+      min-height: 40px;
       padding: 0 14px;
       border: 1px solid var(--line);
       border-radius: 999px;
@@ -542,513 +335,399 @@
       cursor: pointer;
     }
 
-    .note {
-      background: var(--panel);
-      border: 1px solid var(--line);
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 0.42fr);
+      gap: 14px;
+      align-items: start;
+    }
+
+    .article {
+      display: grid;
+      gap: 14px;
+    }
+
+    .article-card {
       border-left: 5px solid var(--blue);
+    }
+
+    .article-card.green {
+      border-left-color: var(--green);
+    }
+
+    .article-card.gold {
+      border-left-color: var(--gold);
+    }
+
+    .article-card.rose {
+      border-left-color: var(--rose);
+    }
+
+    .quote {
+      margin: 10px 0 0;
+      border-left: 4px solid rgba(143, 197, 255, 0.64);
+      background: rgba(143, 197, 255, 0.1);
       border-radius: 8px;
-      padding: 14px 16px;
-      color: #d6dee9;
+      padding: 12px 14px;
+      color: #dfe9f4;
     }
 
-    a {
-      color: var(--blue);
-      text-decoration: none;
-      font-weight: 650;
+    .quick-list {
+      display: grid;
+      gap: 10px;
     }
 
-    a:hover {
-      text-decoration: underline;
+    .quick-item {
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
     }
 
-    @media (max-width: 860px) {
-      .grid,
-      .date-strip,
+    .quick-item:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .quick-item strong {
+      display: block;
+      margin-bottom: 2px;
+      line-height: 1.35;
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .note {
+      border-left: 5px solid var(--cyan);
+      background: #172527;
+    }
+
+    @media (max-width: 900px) {
+      .dashboard,
       .nav-grid,
-      .home-dashboard,
-      .compact-summary {
+      .content-grid,
+      .compare-grid {
         grid-template-columns: 1fr;
       }
 
-      .status-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      h1 {
-        font-size: 25px;
-      }
-
-      header {
-        padding-top: 22px;
+      .hero {
+        min-height: 28vh;
+        padding-top: 38px;
       }
     }
 
-    @media (max-width: 560px) {
-      .status-grid {
+    @media (max-width: 640px) {
+      .mini-grid {
         grid-template-columns: 1fr;
       }
 
-      .priority-item {
-        grid-template-columns: 1fr;
-        gap: 4px;
+      .top-actions {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .back-btn {
+        width: 100%;
       }
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="wrap">
-      <h1>二階申請提醒</h1>
-      <p class="subtitle">更新：2026/04/28。現在重點是 4/30 起上傳審查資料，並處理台科、北科報名與繳費。</p>
+    <div class="wrap hero">
+      <h1>備審資料 AI 建議總覽</h1>
+      <p class="subtitle">更新：2026/04/30。把 Claude、GPT、Gemini 對備審資料的優化建議整理成三個分頁，方便在電腦上直接閱讀與對照。</p>
     </div>
   </header>
 
   <main class="wrap">
     <div class="page-panel active" data-panel="home">
-      <section>
-        <div class="home-dashboard">
-          <article class="card hero-card home-card">
-            <div class="badge-row">
-              <span class="badge wait">4/30 開始</span>
-              <span class="badge soon">5/4 / 5/5 截止</span>
+      <section class="dashboard">
+        <article class="card lead-card">
+          <div class="badge-row">
+            <span class="badge green">共同方向</span>
+            <span class="badge gold">資工定位</span>
+            <span class="badge blue">今天可改</span>
+          </div>
+          <h2>三個 AI 的共同結論</h2>
+          <p>資料本身有真實作品、有自省、有成長脈絡，不是空泛型備審。最需要補強的是：把「AI 輔助、基礎不穩、挫折反思」重新包裝成「工程思維、系統化學習動機、可靠系統設計能力」。</p>
+          <div class="mini-grid">
+            <div class="mini-card">
+              <strong>技術要更具體</strong>
+              <span>補成果、版本、資料流、API、Mocking、測試案例與可維護性。</span>
             </div>
-            <h3>現在先收 6 個待辦校系</h3>
-            <p class="meta">中正、中山三系、台科、北科都從 4/30 起進入上傳與確認期；雲科、北大、成大不用再追。</p>
-            <div class="status-grid">
-              <div class="status-tile">
-                <strong>4</strong>
-                <span>已完成報名或繳費，等上傳審查資料。</span>
-              </div>
-              <div class="status-tile">
-                <strong>2</strong>
-                <span>4/30 起處理報名、繳費或上傳。</span>
-              </div>
-              <div class="status-tile">
-                <strong>3</strong>
-                <span>已決定不用處理，避免分心。</span>
-              </div>
+            <div class="mini-card">
+              <strong>弱點要轉向</strong>
+              <span>少寫「我基礎不穩」，多寫「我知道下一階段要補資料結構、演算法與系統基礎」。</span>
             </div>
-            <ul class="checklist">
-              <li><span class="box"></span><span>4/30 先開上傳系統，確認每個校系項目與檔案狀態。</span></li>
-              <li><span class="box"></span><span>台科、北科先完成報名流程，再回頭檢查上傳與確認表。</span></li>
-              <li><span class="box"></span><span>每一校系上傳後都下載或截圖確認頁，避免事後查不到。</span></li>
-            </ul>
-          </article>
+            <div class="mini-card">
+              <strong>資工資管分開</strong>
+              <span>資工講底層邏輯、系統設計、資訊安全；資管講使用者需求、商業應用與溝通橋梁。</span>
+            </div>
+          </div>
+        </article>
 
-          <aside class="card home-card">
-            <h3>最靠近的時間線</h3>
-            <div class="priority-list">
-              <div class="priority-item">
-                <div class="priority-time">4/30</div>
-                <div class="priority-text">
-                  <strong>上傳系統開放</strong>
-                  <span>中正、中山三系、台科、北科都要開始確認資料。</span>
-                </div>
-              </div>
-              <div class="priority-item">
-                <div class="priority-time">5/4 21:00</div>
-                <div class="priority-text">
-                  <strong>第一波收件線</strong>
-                  <span>中正、中山三系、台科要完成上傳與確認。</span>
-                </div>
-              </div>
-              <div class="priority-item">
-                <div class="priority-time">5/5</div>
-                <div class="priority-text">
-                  <strong>北科最後線</strong>
-                  <span>21:00 前上傳，23:59 前繳費完成。</span>
-                </div>
-              </div>
+        <aside class="card">
+          <h3>快速優先順序</h3>
+          <div class="quick-list">
+            <div class="quick-item">
+              <strong>1. 先修掉危險語氣</strong>
+              <span class="meta">「基礎不穩」「操控 AI」「被打槍」這類字眼要換成成長模型。</span>
             </div>
-          </aside>
-        </div>
+            <div class="quick-item">
+              <strong>2. 補作品成果</strong>
+              <span class="meta">P-value 計算機、AI 打卡系統、球場報名系統都要讓老師看見做到哪裡。</span>
+            </div>
+            <div class="quick-item">
+              <strong>3. 未來規劃改成路線圖</strong>
+              <span class="meta">入學前、大一大二、大三大四，各自對應資工核心能力。</span>
+            </div>
+          </div>
+        </aside>
       </section>
 
       <section>
-        <h2>選一個進去</h2>
+        <h2>選一份 AI 建議進去看</h2>
         <div class="nav-grid">
-          <button class="nav-card primary" type="button" data-open-page="overview">
-            <strong>總控</strong>
-            <span class="nav-desc">目前待辦、台科北科、中山面試追蹤。</span>
-            <span class="nav-action">點進去看總控</span>
+          <button class="nav-card" type="button" data-open-page="claude">
+            <span>
+              <strong>Claude 建議</strong>
+              <span class="nav-desc">偏重技術深度、AI 依賴收尾、實驗室動機、資工資管差異。</span>
+            </span>
+            <span class="nav-action">點進去看 Claude</span>
           </button>
-          <button class="nav-card warning" type="button" data-open-page="upload">
-            <strong>上傳項目</strong>
-            <span class="nav-desc">各校系審查資料代碼與準備方向。</span>
-            <span class="nav-action">點進去看項目</span>
+          <button class="nav-card" type="button" data-open-page="gpt">
+            <span>
+              <strong>GPT 建議</strong>
+              <span class="nav-desc">最完整的修改策略，包含 6 件優先修正、句子替換與總評。</span>
+            </span>
+            <span class="nav-action">點進去看 GPT</span>
           </button>
-          <button class="nav-card" type="button" data-open-page="dates">
-            <strong>日期</strong>
-            <span class="nav-desc">4/30、5/4、5/5 等關鍵期限。</span>
-            <span class="nav-action">點進去看日期</span>
-          </button>
-          <button class="nav-card" type="button" data-open-page="nsysu">
-            <strong>中山交通</strong>
-            <span class="nav-desc">中山公告、上傳連結、停車 PDF。</span>
-            <span class="nav-action">點進去看交通</span>
-          </button>
-          <button class="nav-card" type="button" data-open-page="all">
-            <strong>總表</strong>
-            <span class="nav-desc">所有校系狀態，包含不報名與一階未通過。</span>
-            <span class="nav-action">點進去看總表</span>
+          <button class="nav-card" type="button" data-open-page="gemini">
+            <span>
+              <strong>Gemini 建議</strong>
+              <span class="nav-desc">偏重開發者思維、工程術語、Mocking、時間複雜度與排版微調。</span>
+            </span>
+            <span class="nav-action">點進去看 Gemini</span>
           </button>
         </div>
       </section>
 
-      <section>
-        <h2>首頁快速判讀</h2>
-        <div class="compact-summary">
-          <div class="mini-block">
-            <h3>已經安心的部分</h3>
-            <div class="badge-row">
-              <span class="badge done">中山三系已報名</span>
-              <span class="badge done">應考證已列印</span>
-              <span class="badge done">中正已入帳</span>
-            </div>
-            <p class="meta">這幾項現在不用重做，接下來只追上傳、確認與中山面試時間。</p>
-          </div>
-          <div class="mini-block">
-            <h3>不用再花力氣的部分</h3>
-            <div class="badge-row">
-              <span class="badge done">雲科不報名</span>
-              <span class="badge done">北大不報名</span>
-              <span class="badge done">成大一階未通過</span>
-            </div>
-            <p class="meta">這三個不用追繳費、上傳、面試，避免混進待辦清單。</p>
-          </div>
-        </div>
+      <section class="card note">
+        <h3>一句話版本</h3>
+        <p>不要把備審寫成「我很誠實地承認自己不穩」；要改成「我從實作中提早遇到資工問題，所以更需要資工系的系統化訓練，將直覺變成工程能力」。</p>
       </section>
     </div>
 
-    <div class="page-panel" data-panel="overview">
-    <div class="top-actions">
-      <button class="back-btn" type="button" data-back>← 返回首頁</button>
-      <span class="meta">總控</span>
-    </div>
-    <section>
-      <div class="grid">
-        <article class="card hero-card">
-          <div class="badge-row">
-            <span class="badge wait">4/30 開始</span>
-            <span class="badge soon">5/4 截止</span>
+    <div class="page-panel" data-panel="claude">
+      <div class="top-actions">
+        <button class="back-btn" type="button" data-back>← 返回首頁</button>
+        <span class="meta">Claude 備審資料優化建議</span>
+      </div>
+
+      <section class="content-grid">
+        <article class="article">
+          <div class="card article-card green">
+            <div class="badge-row">
+              <span class="badge green">資工角度</span>
+              <span class="badge blue">技術具體化</span>
+            </div>
+            <h2>Claude 的整體判讀</h2>
+            <p>這份備審的最大優勢是真實、有自省、有成長脈絡，不是假大空的文章。主要要補強的是技術面的具體性，讓審查老師相信他真的寫得出程式、跑得出系統。</p>
           </div>
-          <h3>審查資料上傳總控</h3>
-          <p class="meta">中正、中山三系、台科都卡在 5/4 21:00 前完成上傳與確認。</p>
-          <ul class="checklist">
-            <li><span class="box"></span><span>4/30 09:00 起進甄選委員會上傳系統。</span></li>
-            <li><span class="box"></span><span>每個校系上傳後都要完成確認。</span></li>
-            <li><span class="box"></span><span>每個確認表都要下載或截圖保存。</span></li>
-          </ul>
+
+          <div class="card article-card">
+            <h3>一、技術深度不夠具體</h3>
+            <p>自述提到球場報名系統、P-value 計算機、AI 打卡系統，但缺乏成果數據或技術難點突破。面試官可能會想知道：系統是否真的跑起來、解決多少人的問題、程式碼規模、是否有版本迭代紀錄。</p>
+            <p><strong>建議：</strong>在自述或課程成果補具體成果展示，例如球場系統實際服務多少人、歷經 8 個版本迭代。8 版這個亮點已在資管自述出現，資工版也應該更明確強調。</p>
+          </div>
+
+          <div class="card article-card gold">
+            <h3>二、「依賴 AI」的坦承是亮點，但收尾太弱</h3>
+            <p>誠實說自己高度依賴 AI、基礎不穩，這份自省是加分的；但如果收尾只說希望進資工系補足，會太輕描淡寫。</p>
+            <p><strong>建議：</strong>補充已經開始做了什麼來補救，例如已自學 C 語言基礎、已練習 LeetCode，讓審查老師看到他不是光說說，而是在行動中。</p>
+          </div>
+
+          <div class="card article-card">
+            <h3>三、實驗室動機描述太表面</h3>
+            <p>提到對「網路與系統實驗室」感興趣，但只寫資安與跨領域，沒有具體研究題目或教授名字，可能被看成只是查了官網。</p>
+            <p><strong>建議：</strong>時間允許的話，查一位教授的研究方向，用一句話連結自己的作品或興趣，會顯得更用心。</p>
+          </div>
+
+          <div class="card article-card rose">
+            <h3>四、多元表現綜整心得的領導溝通比重過高</h3>
+            <p>資工審查更重視技術潛力與學習能力。綜整心得若花太多篇幅談領導失誤與情緒管理，會稀釋技術形象，這類內容更適合資管。</p>
+            <p><strong>建議：</strong>壓縮領導溝通，把空間留給邏輯思考、技術成長與工程師核心特質。</p>
+          </div>
+
+          <div class="card article-card">
+            <h3>五、資工與資管兩份自述差異要更大</h3>
+            <p>兩份文件大量重複，學習歷程幾乎一樣，真正需要拉開的是就讀動機與能力定位。</p>
+            <p><strong>建議：</strong>資工版強調底層邏輯、系統設計、演算法思維；資管版強調使用者需求、商業應用、人機橋梁。現在已有差異，但可以更鮮明。</p>
+          </div>
         </article>
 
-        <article class="card">
-          <div class="badge-row">
-            <span class="badge wait">4/30 起處理</span>
-            <span class="badge soon">5/4 / 5/5 截止</span>
-          </div>
-          <h3>台科／北科報名繳費</h3>
-          <p class="meta">兩校都不用到校，但仍要完成報名、繳費、上傳與確認。</p>
+        <aside class="card">
+          <h3>Claude 給的行動清單</h3>
           <ul>
-            <li>台科：5/4 21:00 前完成報名與上傳。</li>
-            <li>北科：5/5 23:59 前繳費，5/5 21:00 前上傳。</li>
-            <li>繳費後回系統確認狀態。</li>
+            <li>把球場系統 8 次迭代放進資工版。</li>
+            <li>補一段「我已經開始補基礎」的具體行動。</li>
+            <li>實驗室興趣補教授或研究題目。</li>
+            <li>資工綜整心得減少領導溝通比例。</li>
+            <li>資工、資管自述定位拉開。</li>
           </ul>
-        </article>
+        </aside>
+      </section>
+    </div>
 
-        <article class="card">
-          <div class="badge-row">
-            <span class="badge done">已報名</span>
-            <span class="badge done">已列印應考證</span>
-            <span class="badge soon">面試追蹤</span>
+    <div class="page-panel" data-panel="gpt">
+      <div class="top-actions">
+        <button class="back-btn" type="button" data-back>← 返回首頁</button>
+        <span class="meta">GPT 備審資料優化建議</span>
+      </div>
+
+      <section class="content-grid">
+        <article class="article">
+          <div class="card article-card gold">
+            <div class="badge-row">
+              <span class="badge gold">最完整策略</span>
+              <span class="badge blue">句子可直接改</span>
+            </div>
+            <h2>GPT 的核心結論</h2>
+            <p>整體方向有潛力，但最大風險是太誠實地暴露弱點，卻沒有把弱點轉成資工系想看的成長模型。教授不是在找已經什麼都會的人，而是在看工程思維、基礎潛力、可訓練性、對資工不是幻想、能不能從錯誤中建立系統。</p>
+            <p>目前強項是 P-value 計算機、AI 輔助學習系統、API debug、資料流設計、try/except、pandas、Flask 受挫後的反思；弱點是「AI、反思、基礎不穩」講太多，「資工核心能力」還不夠硬。</p>
           </div>
-          <h3>中山三系面試</h3>
-          <p class="meta">報名已完成，接下來是上傳審查資料與查面試時程。</p>
-          <ul>
-            <li>資工、全英：5/13 查地點與時間。</li>
-            <li>資管：5/12 查正式時程。</li>
-            <li>5/16 注意資工與全英是否撞時。</li>
-          </ul>
+
+          <div class="card article-card">
+            <h3>今天最優先改的 6 件事</h3>
+            <ol>
+              <li><strong>把「基礎不穩」改成「我已經看見下一階段要補的核心能力」。</strong>不要讓教授覺得進資工會撐不住，要讓教授看到他知道資工訓練的價值。</li>
+              <li><strong>減少「AI 很強、我要操控 AI」的語氣。</strong>改成想設計可信任系統，強調驗證、除錯、容錯與安全機制。</li>
+              <li><strong>未來規劃改成資工課程對應能力路線圖。</strong>入學前補 C 與 Python，大一大二補程式設計、資料結構、離散數學、線性代數與機率統計，大三大四結合機器學習、資訊安全與系統設計。</li>
+              <li><strong>P-value 計算機的統計用語要修乾淨。</strong>把顯著水準寫成 α = 0.05，P-value 說明要精準。</li>
+              <li><strong>AI 輔助學習系統要補成果，而不是只有受挫。</strong>說明最後做到終端機版本主要流程、任務狀態、完成紀錄、API 失敗時模擬回覆。</li>
+              <li><strong>資管版不要直接套到資工版。</strong>資工語言要靠近資料結構、演算法、系統設計、資訊安全、軟體工程、除錯、容錯、API、資料流、可維護性、可信任 AI。</li>
+            </ol>
+          </div>
+
+          <div class="card article-card green">
+            <h3>可直接替換的句子方向</h3>
+            <h4>把弱點改成成長路線</h4>
+            <div class="quote">這些經驗讓我看見，若要讓系統不只「能跑」，還能穩定、可維護、可擴充，就必須回到資料結構、演算法與程式語言基礎。</div>
+            <h4>把就讀動機改成工程能力</h4>
+            <div class="quote">我期盼進入資工系後，將過去以實作啟動的學習方式，透過系統化課程訓練，轉化為真正能分析問題、設計架構、驗證系統的工程能力。</div>
+            <h4>把 AI 語氣改成可靠系統</h4>
+            <div class="quote">AI 的不確定性讓我意識到，工程師的價值不只是使用 AI，而是設計驗證、除錯、容錯與安全機制，讓 AI 能在可靠的系統中被使用。</div>
+            <h4>把未來題目改成長期專題</h4>
+            <div class="quote">未來我希望以個人化 AI 工具作為長期專題方向，結合機器學習、資訊安全與系統設計，思考如何讓系統在長期使用資料時，仍能兼顧隱私、正確性與可控性。</div>
+          </div>
+
+          <div class="card article-card rose">
+            <h3>GPT 的最後總評</h3>
+            <p>這四份資料不是空洞型備審，底子是好的。真正要修的是策略包裝。</p>
+            <div class="compare-grid">
+              <div class="card">
+                <h3>現在的感覺</h3>
+                <p>我很會反思，我用 AI 做過一些東西，但我也知道自己基礎不穩。</p>
+              </div>
+              <div class="card">
+                <h3>建議改成</h3>
+                <p>我從實作中提早遇見資工問題：資料流、模組串接、API 失敗、容錯設計、統計概念轉程式、AI 不確定性。這些經驗讓我確定，我需要資工系的系統化訓練，把直覺變成工程能力。</p>
+              </div>
+            </div>
+          </div>
         </article>
-      </div>
-    </section>
 
-    <section>
-      <h2>現在待辦</h2>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>校系</th>
-              <th>狀態</th>
-              <th>下一步</th>
-              <th>期限</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>中正資工</td>
-              <td><span class="badge done">已繳費／已入帳</span></td>
-              <td>上傳審查資料；確認表下載或截圖；自述第一頁放中正個人資料表。</td>
-              <td>5/4 21:00</td>
-            </tr>
-            <tr>
-              <td>中山資工</td>
-              <td><span class="badge done">已報名／已列印應考證</span></td>
-              <td>上傳審查資料；5/13 查教室；5/16 面試。</td>
-              <td>上傳 5/4 21:00</td>
-            </tr>
-            <tr>
-              <td>中山資工全英</td>
-              <td><span class="badge done">已報名／已列印應考證</span></td>
-              <td>上傳審查資料；5/13 查時間地點；準備英文自我介紹；5/16 面試。</td>
-              <td>上傳 5/4 21:00</td>
-            </tr>
-            <tr>
-              <td>中山資管</td>
-              <td><span class="badge done">已報名／已列印應考證</span></td>
-              <td>上傳審查資料；5/12 查正式面試時程；5/18 面試。</td>
-              <td>上傳 5/4 21:00</td>
-            </tr>
-            <tr>
-              <td>台科資工</td>
-              <td><span class="badge wait">4/30 起處理</span></td>
-              <td>進報名系統；完成網路報名資料登錄；完成資格審查暨學習歷程備審資料上傳；確認狀態。</td>
-              <td>5/4 21:00</td>
-            </tr>
-            <tr>
-              <td>北科資工</td>
-              <td><span class="badge wait">4/30 起處理</span></td>
-              <td>登錄報名資料；下載繳費單；完成繳費；上傳審查資料；保存確認表；回系統確認繳費狀態。</td>
-              <td>上傳 5/5 21:00；繳費 5/5 23:59</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+        <aside class="card">
+          <h3>GPT 最值得先照做</h3>
+          <ul>
+            <li>先修「基礎不穩」相關句子。</li>
+            <li>修掉過度自信的 AI 語氣。</li>
+            <li>未來規劃改成四年能力路線。</li>
+            <li>P-value 統計語句改精準。</li>
+            <li>AI 系統補「最後做到什麼程度」。</li>
+          </ul>
+        </aside>
+      </section>
     </div>
 
-    <div class="page-panel" data-panel="upload">
-    <div class="top-actions">
-      <button class="back-btn" type="button" data-back>← 返回首頁</button>
-      <span class="meta">上傳項目</span>
-    </div>
-    <section>
-      <h2>各校系要準備的上傳項目</h2>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>校系</th>
-              <th>審查資料代碼</th>
-              <th>要準備什麼</th>
-              <th>提醒</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>中正資工</td>
-              <td>A、B、C、D、F、J、L、M、N、O、P、Q</td>
-              <td>修課紀錄、課程學習成果、多元表現、學習歷程自述</td>
-              <td>自述第一頁要放中正「申請入學個人資料表」，親自簽名後掃描，與 O/P/Q 整併成一個 PDF。</td>
-            </tr>
-            <tr>
-              <td>中山資工</td>
-              <td>A、D、F、J、L、M、N、O、P、Q</td>
-              <td>修課紀錄、自然科學探究成果／相關課程學習成果、自主學習、競賽、檢定證照、特殊表現、多元表現綜整心得、學習歷程自述</td>
-              <td>資工只列 D 類課程學習成果，優先準備自然科學、資訊、實作與探究相關成果。</td>
-            </tr>
-            <tr>
-              <td>中山資工全英</td>
-              <td>A、D、F、J、L、M、N、O、P、Q、R</td>
-              <td>同中山資工，另含 R「可說服且有利審查資料」</td>
-              <td>除資工相關成果外，英文能力、全英學習適應、國際或英文表達相關材料可優先檢查是否適合放入。</td>
-            </tr>
-            <tr>
-              <td>中山資管</td>
-              <td>A、B、F、G、M、N、O、P、Q</td>
-              <td>修課紀錄、書面報告、自主學習、社團活動、特殊表現、多元表現綜整心得、學習歷程自述</td>
-              <td>資管重點可偏向資訊管理、專案整理、溝通協作、商管與資訊結合的動機。</td>
-            </tr>
-            <tr>
-              <td>台科資工</td>
-              <td>待 4/30 系統確認</td>
-              <td>資格審查暨學習歷程備審資料</td>
-              <td>4/30 開放後進台科系統確認實際勾選項目。</td>
-            </tr>
-            <tr>
-              <td>北科資工</td>
-              <td>待 4/30 系統確認</td>
-              <td>資格審查暨學習歷程備審資料</td>
-              <td>4/30 開放後進北科系統確認實際勾選項目，5/5 21:00 前完成上傳。</td>
-            </tr>
-          </tbody>
-        </table>
+    <div class="page-panel" data-panel="gemini">
+      <div class="top-actions">
+        <button class="back-btn" type="button" data-back>← 返回首頁</button>
+        <span class="meta">Gemini 備審資料優化建議</span>
       </div>
-    </section>
-    </div>
 
-    <div class="page-panel" data-panel="dates">
-    <div class="top-actions">
-      <button class="back-btn" type="button" data-back>← 返回首頁</button>
-      <span class="meta">日期</span>
-    </div>
-    <section>
-      <h2>接下來日期</h2>
-      <div class="date-strip">
-        <div class="date">
-          <strong>4/28 12:00</strong>
-          <span>中山三系已完成報名並列印應考證。</span>
-        </div>
-        <div class="date">
-          <strong>4/30 09:00</strong>
-          <span>多數學校開始上傳審查資料。</span>
-        </div>
-        <div class="date">
-          <strong>5/4</strong>
-          <span>中正、中山、台科多數截止，時間不同要分開看。</span>
-        </div>
-        <div class="date">
-          <strong>5/5</strong>
-          <span>北科截止，5/5 21:00 前完成上傳。</span>
-        </div>
-      </div>
-    </section>
-    </div>
+      <section class="content-grid">
+        <article class="article">
+          <div class="card article-card">
+            <div class="badge-row">
+              <span class="badge blue">開發者思維</span>
+              <span class="badge green">工程術語</span>
+            </div>
+            <h2>Gemini 的整體判讀</h2>
+            <p>亮點在於高度自省能力與強烈的問題驅動學習特質，這符合資工系對「開發者思維」的要求。只要加強工程術語，並減少對「我不會理論」的負面強調，改成學習計畫，備審會更有競爭力。</p>
+          </div>
 
-    <div class="page-panel" data-panel="nsysu">
-    <div class="top-actions">
-      <button class="back-btn" type="button" data-back>← 返回首頁</button>
-      <span class="meta">中山交通</span>
-    </div>
-    <section>
-      <h2>中山連結與停車</h2>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>項目</th>
-              <th>連結 / 重點</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>中山主公告</td>
-              <td><a href="https://oaa.nsysu.edu.tw/p/406-1003-374078,r1288.php?Lang=zh-tw" target="_blank" rel="noopener">115 申請入學第二階段公告</a></td>
-            </tr>
-            <tr>
-              <td>4/30 上傳審查資料</td>
-              <td><a href="https://www.cac.edu.tw/apply115/dataupload.php" target="_blank" rel="noopener">甄選委員會第二階段審查資料上傳系統</a></td>
-            </tr>
-            <tr>
-              <td>上傳 QA</td>
-              <td><a href="https://www.cac.edu.tw/apply115/dataupload_qa.php" target="_blank" rel="noopener">審查資料上傳系統常見問答</a></td>
-            </tr>
-            <tr>
-              <td>停車 PDF</td>
-              <td><a href="https://oaa.nsysu.edu.tw/static/file/3/1003/attach/46/pta_374078_5039700_13065.pdf" target="_blank" rel="noopener">海堤停車場 QR Code 券使用說明</a></td>
-            </tr>
-            <tr>
-              <td>停車重點</td>
-              <td>5/16 假日可憑第二階段應考證停入校園；5/18 平日汽車停海堤停車場。機車不需停車券。</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-    </div>
+          <div class="card article-card green">
+            <h3>一、技術深度：從使用工具轉向理解原理</h3>
+            <p>資料中多次誠實提到基礎理論缺失或依賴套件，但資工系重視數學與演算法基礎。</p>
+            <ul>
+              <li>P-value 計算機不要只寫完全無法理解公式而呼叫套件，可增加如何嘗試理解公式，例如 t 分佈意義或拆解積分過程。</li>
+              <li>Python 的 List、Dictionary 仍偏語法層面，建議在未來規劃或自主學習明確提到時間複雜度 O(n) 分析。</li>
+            </ul>
+          </div>
 
-    <div class="page-panel" data-panel="all">
-    <div class="top-actions">
-      <button class="back-btn" type="button" data-back>← 返回首頁</button>
-      <span class="meta">總表</span>
-    </div>
-    <section>
-      <h2>總表</h2>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>校系</th>
-              <th>繳費狀態</th>
-              <th>上傳截止</th>
-              <th>是否到校</th>
-              <th>現在要注意</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>中正資工</td>
-              <td><span class="badge done">已繳費／已入帳</span></td>
-              <td>5/4 21:00</td>
-              <td>不用到校</td>
-              <td>準備 A、B、C、D、F、J、L、M、N、O、P、Q；自述第一頁放個人資料表。</td>
-            </tr>
-            <tr>
-              <td>中山資工</td>
-              <td><span class="badge done">已報名／已列印應考證</span></td>
-              <td>5/4 21:00</td>
-              <td>5/16 到校</td>
-              <td>5/13 查教室；注意和中山全英同日。</td>
-            </tr>
-            <tr>
-              <td>中山資工全英</td>
-              <td><span class="badge done">已報名／已列印應考證</span></td>
-              <td>5/4 21:00</td>
-              <td>5/16 到校</td>
-              <td>5/13 查時間地點；準備英文自我介紹。</td>
-            </tr>
-            <tr>
-              <td>中山資管</td>
-              <td><span class="badge done">已報名／已列印應考證</span></td>
-              <td>5/4 21:00</td>
-              <td>5/18 到校</td>
-              <td>5/12 查正式面試時程。</td>
-            </tr>
-            <tr>
-              <td>雲科資工</td>
-              <td><span class="badge done">不報名／不繳費</span></td>
-              <td>不處理</td>
-              <td>不去</td>
-              <td>2026/04/28 已決定不報名，不再追繳費、上傳與面試。</td>
-            </tr>
-            <tr>
-              <td>台科資工</td>
-              <td><span class="badge wait">4/30 起處理</span></td>
-              <td>5/4 21:00</td>
-              <td>不用到校</td>
-              <td>完成網路報名與資料上傳，確認狀態。</td>
-            </tr>
-            <tr>
-              <td>北科資工</td>
-              <td><span class="badge wait">4/30 起處理</span></td>
-              <td>5/5 21:00</td>
-              <td>不用到校</td>
-              <td>5/5 23:59 前繳費；5/5 21:00 前完成上傳。</td>
-            </tr>
-            <tr>
-              <td>北大資工</td>
-              <td><span class="badge done">不報名／不繳費</span></td>
-              <td>不處理</td>
-              <td>不去</td>
-              <td>2026/04/28 已決定不報名，不再追二階公告與繳費。</td>
-            </tr>
-            <tr>
-              <td>成大工管</td>
-              <td><span class="badge done">一階未通過</span></td>
-              <td>不處理</td>
-              <td>不去</td>
-              <td>第一階段未通過，無二階待辦。</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+          <div class="card article-card gold">
+            <h3>二、AI 工具定位要精煉</h3>
+            <p>AI 在資工系眼中是雙面刃。資料裡若像是被 AI 引導，建議調整成「我設計測試案例來驗證 AI 生成程式碼的正確性」。要強調兒子是系統架構師，AI 只是加速開發的插件。</p>
+            <p>為了解決 429 錯誤而設計的「模擬回覆」，工程實務上可稱為 <strong>Mocking</strong>，直接使用這個術語能展現軟體工程實務思維。</p>
+          </div>
 
-    <section class="note">
-      <strong>一句話版本：</strong>4/30 先處理審查資料上傳和台科、北科報名；5/4 前收掉中正、中山三系、台科；5/5 前收掉北科。雲科、北大、成大不用處理。
-    </section>
+          <div class="card article-card">
+            <h3>三、專題呈現要工程化</h3>
+            <p>科技專題目前偏重團隊溝通與挫折，但教授也想看技術細節。</p>
+            <ul>
+              <li>在主程式資料流圖旁補充資料交換格式，例如是否使用 JSON。</li>
+              <li>補 API 設計邏輯，或是否曾思考多名使用者併發請求。</li>
+              <li>球場報名表單歷經 8 版是亮點，可列出一兩個關鍵技術轉折，例如為何從 txt 改成 CSV，是為了讀取速度或資料結構化。</li>
+            </ul>
+          </div>
+
+          <div class="card article-card rose">
+            <h3>四、未來規劃要更具體</h3>
+            <ul>
+              <li>入學前若提到 C 語言，可具體寫學習記憶體管理與 pointer，以理解系統底層運作。</li>
+              <li>若提到網路與系統實驗室，可加入大二、大三嘗試參加資訊應用服務創新競賽等實戰目標。</li>
+            </ul>
+          </div>
+
+          <div class="card article-card">
+            <h3>五、簡歷與綜整心得微調</h3>
+            <ul>
+              <li>特殊表現排序中，科展優等與生物奧林匹亞應放在鉛球冠軍、接力亞軍前面。</li>
+              <li>綜整心得中「缺乏基礎理論」出現太多次，應收斂成就學動機：正因為實作中發現理論必要性，才更渴望進中山資工系統性學習。</li>
+            </ul>
+          </div>
+        </article>
+
+        <aside class="card">
+          <h3>Gemini 關鍵字</h3>
+          <ul>
+            <li>Test Case</li>
+            <li>Mocking</li>
+            <li>JSON</li>
+            <li>API 設計邏輯</li>
+            <li>時間複雜度 O(n)</li>
+            <li>Pointer 與記憶體管理</li>
+            <li>資料結構化</li>
+          </ul>
+        </aside>
+      </section>
     </div>
   </main>
+
   <script>
     const panels = document.querySelectorAll("[data-panel]");
     const panelNames = Array.from(panels).map((panel) => panel.dataset.panel);
@@ -1062,17 +741,17 @@
       return isValidPanel(name) ? name : "home";
     }
 
+    function makeUrl(name) {
+      const url = new URL(window.location);
+      url.hash = name === "home" ? "" : name;
+      return url;
+    }
+
     function showPage(name) {
       panels.forEach((panel) => {
         panel.classList.toggle("active", panel.dataset.panel === name);
       });
       window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function makeUrl(name) {
-      const url = new URL(window.location);
-      url.hash = name === "home" ? "" : name;
-      return url;
     }
 
     function openPage(name) {
@@ -1099,8 +778,9 @@
       showPage(getPanelFromHash());
     });
 
-    showPage(getPanelFromHash());
-    history.replaceState({ panel: getPanelFromHash() }, "", makeUrl(getPanelFromHash()));
+    const initialPanel = getPanelFromHash();
+    showPage(initialPanel);
+    history.replaceState({ panel: initialPanel }, "", makeUrl(initialPanel));
   </script>
 </body>
 </html>
